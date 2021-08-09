@@ -4,8 +4,7 @@ import com.meli.quasar.domain.SatelliteCommunication;
 
 import java.util.List;
 
-public interface CreateSatelliteCommunicationUseCase {
+public interface GetSplitMessageUseCase {
 
-    public String createCommunication(SatelliteCommunication sat);
-
+    public List<SatelliteCommunication> getMessageCommunication();
 }

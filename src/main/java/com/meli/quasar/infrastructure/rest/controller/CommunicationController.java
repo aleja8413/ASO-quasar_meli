@@ -1,13 +1,12 @@
 package com.meli.quasar.infrastructure.rest.controller;
 
+import com.meli.quasar.domain.exceptions.GetLocationException;
+import com.meli.quasar.domain.exceptions.GetMessageException;
 import com.meli.quasar.infrastructure.rest.dto.SatelliteDto;
 import com.meli.quasar.infrastructure.rest.mapper.CommunicationMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.meli.quasar.application.services.CommunicationService;
 import com.meli.quasar.infrastructure.rest.dto.CommunicationResponse;
@@ -15,6 +14,7 @@ import com.meli.quasar.infrastructure.rest.payload.CommunicationPayLoad;
 
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 public class CommunicationController {
@@ -22,7 +22,7 @@ public class CommunicationController {
 	private final CommunicationService communication;
 
 	@PostMapping("/topsecret")
-	public ResponseEntity<CommunicationResponse> topsecret(@RequestBody CommunicationPayLoad payLoad) {
+	public ResponseEntity<CommunicationResponse> topsecret(@RequestBody CommunicationPayLoad payLoad) throws GetLocationException, GetMessageException {
 		return new ResponseEntity<CommunicationResponse> ( CommunicationMapper.INSTANCE.entityToResponse(
 										communication.getTopSecretCommunication(
 											CommunicationMapper.INSTANCE.listDtoToEntity(payLoad.getSatellites())
@@ -38,6 +38,14 @@ public class CommunicationController {
 		return new ResponseEntity<String> (communication.
 												createMessage(CommunicationMapper.INSTANCE.dtoToEntity(satelliteDto)),
 											HttpStatus.OK
+		);
+	}
+
+	@GetMapping("/topsecret_split")
+	public ResponseEntity<CommunicationResponse> topsecret_split_mesagge() throws GetMessageException, GetLocationException {
+		return new ResponseEntity<CommunicationResponse> (CommunicationMapper.INSTANCE.entityToResponse(
+				communication.getSplitMessages()),
+				HttpStatus.OK
 		);
 	}
 

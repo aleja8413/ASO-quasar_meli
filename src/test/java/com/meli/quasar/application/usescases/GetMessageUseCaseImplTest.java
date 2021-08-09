@@ -3,10 +3,13 @@ package com.meli.quasar.application.usescases;
 import com.meli.quasar.MockFactory;
 import com.meli.quasar.domain.Satellites;
 import com.meli.quasar.application.usescases.impl.GetMessageUseCaseImpl;
+import com.meli.quasar.domain.exceptions.GetMessageException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GetMessageUseCaseImplTest {
 
@@ -14,7 +17,7 @@ public class GetMessageUseCaseImplTest {
 
 
     @Test
-    public void GivenReapetingSatellites_ThenReturnMesagge(){
+    public void GivenReapetingSatellites_ThenReturnMesagge() throws GetMessageException {
         String expected = "este es un mensaje secreto";
         Satellites satList = MockFactory.getSateliteCommunication("communication_reapeting_satellites");
         assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
@@ -22,23 +25,27 @@ public class GetMessageUseCaseImplTest {
     }
 
     @Test
-    public void GivenReapetingSatellitesEmptyMessageArray_ThenReturnEmpty(){
-        String expected = "";
+    public void GivenReapetingSatellitesEmptyMessageArray_ThenReturnEmpty() throws GetMessageException {
+
         Satellites satList = MockFactory.getSateliteCommunication("communication_reapeting_satellites_emptymesagge");
-        assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
+        Assertions.assertThrows(GetMessageException.class, () -> {
+            getMessageUseCase.getMessageSatellite(satList.getSatellites());
+        });
 
     }
 
     @Test
-    public void GivenReapetingSatellitesEmptyValuesInMessage_ThenReturnWildCard(){
-        String expected = "{0}";
+    public void GivenReapetingSatellitesEmptyValuesInMessage_ThenReturnWildCard() throws GetMessageException {
+
         Satellites satList = MockFactory.getSateliteCommunication("communication_reapeting_satellites_emptyvaluesmesagge");
-        assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
+        Assertions.assertThrows(GetMessageException.class, () -> {
+            getMessageUseCase.getMessageSatellite(satList.getSatellites());
+        });
 
     }
 
     @Test
-    public void GivenSatellitesCompletedMessage_ThenReturnCompletedMessage(){
+    public void GivenSatellitesCompletedMessage_ThenReturnCompletedMessage() throws GetMessageException {
         String expected = "este es un mensaje secreto";
         Satellites satList = MockFactory.getSateliteCommunication("communication_reapeting_satellites_completed_message");
         assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
@@ -46,15 +53,16 @@ public class GetMessageUseCaseImplTest {
     }
 
     @Test
-    public void GivenInvalidSatellite_ThenReturnMessageWithWildCard(){
-        String expected = "este es un mensaje {0}";
+    public void GivenInvalidSatellite_ThenReturnMessageWithWildCard() throws GetMessageException {
         Satellites satList = MockFactory.getSateliteCommunication("communication_invalid_satellite_wildcard");
-        assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
+        Assertions.assertThrows(GetMessageException.class, () -> {
+            getMessageUseCase.getMessageSatellite(satList.getSatellites());
+        });
 
     }
 
     @Test
-    public void GivenCValidSatellite_ThenCompletedMessage(){
+    public void GivenCValidSatellite_ThenCompletedMessage() throws GetMessageException {
         String expected = "este es un mensaje secreto";
         Satellites satList = MockFactory.getSateliteCommunication("communication_satellites_completed_message");
         assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
@@ -62,17 +70,19 @@ public class GetMessageUseCaseImplTest {
     }
 
     @Test
-    public void GivenAllInvalidSatellites_ThenReturnEmpty(){
-        String expected = "";
+    public void GivenAllInvalidSatellites_ThenReturnEmpty() throws GetMessageException {
         Satellites satList = MockFactory.getSateliteCommunication("communication_invalid_satellites");
-        assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
+        Assertions.assertThrows(GetMessageException.class, () -> {
+            getMessageUseCase.getMessageSatellite(satList.getSatellites());
+        });
     }
 
     @Test
-    public void GivenValidSatellitesWithDiffLenMessage_ThenMessage(){
-        String expected = "este es {0} mensaje secreto";
+    public void GivenValidSatellitesWithDiffLenMessage_ThenMessage() throws GetMessageException {
         Satellites satList = MockFactory.getSateliteCommunication("communication_valid_satellites_diff_message_len");
-        assertThat(getMessageUseCase.getMessageSatellite(satList.getSatellites()), is(expected));
+        Assertions.assertThrows(GetMessageException.class, () -> {
+            getMessageUseCase.getMessageSatellite(satList.getSatellites());
+        });
     }
 
 

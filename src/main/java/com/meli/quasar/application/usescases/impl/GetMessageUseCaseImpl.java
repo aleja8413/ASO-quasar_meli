@@ -3,6 +3,7 @@ package com.meli.quasar.application.usescases.impl;
 import com.meli.quasar.domain.SatelliteCommunication;
 import com.meli.quasar.application.usescases.GetMessageUseCase;
 import com.meli.quasar.application.usescases.UtilUseCase;
+import com.meli.quasar.domain.exceptions.GetMessageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import static java.util.Comparator.comparing;
 public class GetMessageUseCaseImpl implements GetMessageUseCase{
 
 	@Override
-	public String getMessageSatellite(List<SatelliteCommunication> satelliteCommunicationList) {
+	public String getMessageSatellite(List<SatelliteCommunication> satelliteCommunicationList) throws GetMessageException {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
 		String msg ="";
 		if(satelliteCommunicationList != null) {
@@ -46,7 +47,9 @@ public class GetMessageUseCaseImpl implements GetMessageUseCase{
 						.collect(Collectors.toList()));
 			}
 		}
-
+		if(UtilUseCase.isBlankOrNull(msg ) || msg.contains("{0}")){
+			throw new GetMessageException("Unable to determine message");
+		}
 		return msg;
 	}
 
