@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface CreateSatelliteMessageMapper {
 
     CreateSatelliteMessageMapper INSTANCE = Mappers.getMapper(CreateSatelliteMessageMapper.class);
